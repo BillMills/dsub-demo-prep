@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: target-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: target
+  template:
+    metadata:
+      labels:
+        app: target
+    spec:
+      containers:
+      - name: tgt
+        image: training/whoami
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: origin-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: origin
+  template:
+    metadata:
+      labels:
+        app: origin
+    spec:
+      containers:
+      - name: org
+        image: centos:7
+        command: ["sleep", "10000"]
