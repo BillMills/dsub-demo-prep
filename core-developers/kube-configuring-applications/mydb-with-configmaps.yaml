@@ -12,9 +12,27 @@ spec:
       labels:
         app: db
     spec:
+      volumes:
+        - name: init-vol
+          configMap:
+            name: dbinit
       containers:
       - name: postgres
         image: postgres:9.6
+        volumeMounts:
+          - name: init-vol
+            mountPath: /docker-entrypoint-initdb.d
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              configMapKeyRef:
+                name: env-configs
+                key: POSTGRES_USER
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: env-configs
+                key: POSTGRES_DB
 ---
 apiVersion: apps/v1
 kind: Deployment

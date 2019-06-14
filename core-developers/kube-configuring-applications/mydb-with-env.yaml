@@ -15,6 +15,17 @@ spec:
       containers:
       - name: postgres
         image: postgres:9.6
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              configMapKeyRef:
+                name: env-configs
+                key: POSTGRES_USER
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: env-configs
+                key: POSTGRES_DB
 ---
 apiVersion: apps/v1
 kind: Deployment
