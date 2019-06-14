@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voldemo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      volumes:
+        - name: storage-demo
+          persistentVolumeClaim:
+           claimName: pvc-demo
+      containers:
+      - name: sleepy
+        image: centos:7
+        volumeMounts:
+          - mountPath: "/demo"
+            name: storage-demo
+        command: ["sleep", "10000"]
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-demo
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
